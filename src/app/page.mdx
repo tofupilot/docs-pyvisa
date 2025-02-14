@@ -1,54 +1,24 @@
-import { HeroPattern } from '@/components/HeroPattern'
-
 export const metadata = {
-  title: 'Documentation - TofuPilot',
-  description:
-    'This guide helps you start uploading your first test run to TofuPilot in under five minutes.',
+  title: 'PyVISA',
+  description: 'This guide explains how to setup PyVISA on Windows and Linux.',
 }
 
-<HeroPattern />
+# What is PyVISA?
 
-# Quickstart
+**VISA** (Virtual Instrument Software Architecture) is a universal driver for controlling measuring instruments over various interfaces such as USB, GPIB, Ethernet, and others. It allows you to control instruments using SCPI (Standard Commands for Programmable Instruments) commands. For example, the command `"MEASUREMENT:FREQUENCY?"` retrieves the signal frequency on an oscilloscope.
 
-Start uploading your first test run to TofuPilot in under five minutes. {{ className: 'lead' }}
+**PyVISA** is a Python wrapper for the VISA driver, enabling you to control instruments using Python. Here's an example of how to use PyVISA:
 
-<Image src="/quickstart-header.png" alt="Quickstart Interactive Guide" />
+<Code language="python" code={`import pyvisa
 
-## Account setup
+# The resource manager gives you access to all connected instruments
+rm = pyvisa.ResourceManager()
 
-To use TofuPilot, create an account or join an existing organization by [invitation](/user-management#invite-user).
+# Open a connection to the oscilloscope
+oscilloscope = rm.open_resource('INTERFACE::VID::PID::SN::INSTR')  # Instrument's VISA address
 
-<div className="not-prose">
-  <Button
-    href={'https://tofupilot.app/auth/signup'}
-    variant="text"
-    arrow="right"
-    target="_blank"
-    rel="noopener"
-  >
-    Create a free account
-  </Button>
-</div>
+# Set time scale to 1 ms/div
+oscilloscope.write('HORIZONTAL:SCALE 0.001')
 
-## First test Run
-
-After creating your account, an interactive guide within the application will walk you through the steps described below.
-
-<Image
-  src="/quickstart-page-get-started.png"
-  alt="Quickstart Interactive Guide"
-/>
-
-<Note>
-  We recommend using **virtualenv** for isolated Python environments. Learn how
-  to set one up for:
-  [VSCode](https://code.visualstudio.com/docs/python/environments#_virtual-environments),
-  [PyCharm](https://www.jetbrains.com/help/pycharm/creating-virtual-environment.html),
-  [Sublime Text](https://packagecontrol.io/packages/Virtualenv).
-</Note>
-
-## Next
-
-Congratulations on uploading your first test run to TofuPilot! This simple test is just the beginning. The next guides will show you how to add essential options like test phases, attachments, and more.
-
-Let's make this the start of a long and successful journey! 🥳
+# Set vertical scale for Channel 1 to 1 V/div
+oscilloscope.write('CH1:SCALE 1.0')`} />

@@ -12,8 +12,8 @@ import { CSPostHogProvider } from '@/components/monitoring/posthog'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - TofuPilot',
-    default: 'TofuPilot',
+    template: '%s - PyVISA',
+    default: 'PyVISA',
   },
 }
 

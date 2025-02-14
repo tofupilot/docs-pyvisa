@@ -64,7 +64,7 @@ export const CustomImage = ({
   ...props
 }: ImageProps) => (
   <Image
-    src={`/docs${src}`}
+    src={src}
     alt={alt}
     width={width}
     height={height}

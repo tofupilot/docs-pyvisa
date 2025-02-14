@@ -238,42 +238,19 @@ function NavigationGroup({
 
 export const navigation: Array<NavGroup> = [
   {
-    title: 'Test Runs',
+    title: 'Presentation',
     links: [
       {
-        title: 'Quickstart',
+        title: 'What is PyVisa',
         href: '/',
-      },
-      { title: 'Procedures', href: '/procedures' },
-      { title: 'Unit under test (UUT)', href: '/unit-under-test-uut' },
-      { title: 'Phases', href: '/phases' },
-      { title: 'Sub-units', href: '/sub-units' },
-      { title: 'Attachments', href: '/attachments' },
-    ],
-  },
-  {
-    title: 'Integrations',
-    links: [
-      { title: 'OpenHTF', href: '/openhtf' },
-      { title: 'Python', href: '/python' },
-    ],
-  },
-  {
-    title: 'Web App',
-    links: [
-      { title: 'Test analytics', href: '/analytics' },
-      { title: 'Test phases analysis', href: '/analysis' },
-      { title: 'Traceability', href: '/traceability' },
-      { title: 'Account management', href: '/user-management' },
+      }
     ],
   },
   {
     title: 'Guides',
     links: [
-      { title: 'REST API', href: '/api' },
-      { title: 'Offline upload', href: '/offline-upload' },
-      { title: 'Self-hosting', href: '/self-hosting', new: true },
-      { title: 'Errors manual', href: '/errors' },
+      { title: 'Windows Setup', href: '/windows-setup' },
+      { title: 'Linux Setup', href: '/linux-setup' },
     ],
   },
 ]
