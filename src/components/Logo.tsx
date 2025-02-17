@@ -4,11 +4,11 @@ export function Logo() {
   return (
     <a href="https://www.tofupilot.com" aria-label="Landing Page">
       <Image
-        width={28}
-        height={28}
+        width={130}
+        height={30}
         quality={100}
-        src="/docs/icon.png"
-        alt="TofuPilot"
+        src="/logo.png"
+        alt="PyVISA"
       />
     </a>
   )
