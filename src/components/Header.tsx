@@ -77,8 +77,8 @@ export const Header = forwardRef<
       <div className="flex items-center gap-5">
         <nav className="hidden md:block">
           <ul role="list" className="flex items-center gap-8">
-            <TopLevelNavItem href="https://www.tofupilot.com">
-              TofuPilot
+            <TopLevelNavItem href="https://github.com/pyvisa/pyvisa">
+              GitHub
             </TopLevelNavItem>
           </ul>
         </nav>
@@ -87,11 +87,11 @@ export const Header = forwardRef<
           <MobileSearch />
           <ThemeToggle />
         </div>
-        <div className="hidden min-[416px]:contents">
+        {/* <div className="hidden min-[416px]:contents">
           <Button arrow="right" href="https://www.tofupilot.app/auth/signup">
             Sign up
           </Button>
-        </div>
+        </div> */}
       </div>
     </motion.div>
   )
