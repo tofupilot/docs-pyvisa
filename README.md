@@ -1,8 +1,8 @@
 # OpenHTF
 
-Repository for TofuPilot [documentation](https://tofupilot.com/docs).
+Repository for PyVISA [documentation](https://pyvisa.com).
 
-[TofuPilot](https://tofupilot.com) is a plug-and-play manufacturing test analytics app.
+[PyVISA](https://pyvisa.com) PyVISA is a Python package that lets you control measurement devices over interfaces like GPIB, RS232, USB, and Ethernet.
 
 ### License
 

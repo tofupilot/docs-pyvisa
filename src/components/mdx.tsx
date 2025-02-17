@@ -47,8 +47,8 @@ function InfoIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 
 export function Note({ children }: { children: React.ReactNode }) {
   return (
-    <div className="my-6 flex gap-2.5 rounded-2xl border border-lime-500/20 bg-lime-50/50 p-4 leading-6 text-lime-900 dark:border-lime-500/30 dark:bg-lime-500/5 dark:text-lime-200 dark:[--tw-prose-links-hover:theme(colors.lime.300)] dark:[--tw-prose-links:theme(colors.white)]">
-      <InfoIcon className="mt-1 h-4 w-4 flex-none fill-lime-500 stroke-white dark:fill-lime-200/20 dark:stroke-lime-200" />
+    <div className="my-6 flex gap-2.5 rounded-2xl border border-amber-500/20 bg-amber-50/50 p-4 leading-6 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/5 dark:text-amber-200 dark:[--tw-prose-links-hover:theme(colors.amber.300)] dark:[--tw-prose-links:theme(colors.white)]">
+      <InfoIcon className="mt-1 h-4 w-4 flex-none fill-amber-500 stroke-white dark:fill-amber-200/20 dark:stroke-amber-200" />
       <div className="[&>:first-child]:mt-0 [&>:last-child]:mb-0">
         {children}
       </div>
@@ -64,7 +64,7 @@ export const CustomImage = ({
   ...props
 }: ImageProps) => (
   <Image
-    src={`/docs${src}`}
+    src={src}
     alt={alt}
     width={width}
     height={height}

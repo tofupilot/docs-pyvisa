@@ -1,0 +1,165 @@
+export const metadata = {
+  title: 'PyVISA',
+  description: 'This guide explains how to setup PyVISA on Windows and Linux.',
+}
+
+# Linux Setup
+
+## TL;DR
+
+For USB devices you will need to:
+- **Set Udev Rules:** create udev rules to authorize raw USB access.
+- **Install pyvisa system-wide:** even when using a venv you will need pyvisa system-wide. Install the python3-pyvisa package.
+- **Check device presence:** <Code language="bash" code={`python3 -c "import pyvisa; print(pyvisa.ResourceManager('@py').list_resources())"`} />
+
+### Complete Installation Script
+
+<Code language="bash" code={`#!/bin/bash
+
+## This script was tested on Ubuntu 24.04 LTS
+
+# Function to handle errors
+handle_error() {
+    echo "Error: $1"
+    exit 1
+}
+
+# Install python3-pyvisa
+echo "Installing python3-pyvisa..."
+sudo apt update || handle_error "Failed to update package list."
+sudo apt install -y python3-pyvisa || handle_error "Failed to install python3-pyvisa."
+
+# Create a udev rule to authorize raw USB access to a group called usbgroup
+echo "Creating udev rule for raw USB access..."
+sudo bash -c 'cat > /etc/udev/rules.d/99-usbgroup.rules <<EOF
+SUBSYSTEM=="usb", GROUP="usbgroup", MODE="0666"
+EOF' || handle_error "Failed to create udev rule."
+
+# Reload udev rules
+sudo udevadm control --reload-rules || handle_error "Failed to reload udev rules."
+sudo udevadm trigger || handle_error "Failed to trigger udev rules."
+
+# Create the usbgroup group
+echo "Creating usbgroup group..."
+sudo groupadd usbgroup || handle_error "Failed to create usbgroup group."
+
+# Add the current user to the usbgroup group
+echo "Adding current user to usbgroup group..."
+sudo usermod -aG usbgroup $USER || handle_error "Failed to add user to usbgroup group."
+
+# Inform the user to reboot
+echo "All set! Please reboot your system to apply the changes."
+`}/>
+
+### Usage:
+1. Save the script to a file, for example, `setup_pyvisa.sh`.
+2. Make the script executable:
+   <Code language="bash" code={`chmod +x setup_pyvisa.sh`} />
+3. Run the script:
+   <Code language="bash" code={`./setup_pyvisa.sh`} />
+4. Reboot
+5. Check if you see your instrument:
+<Code language="bash" code={`python3 -c "import pyvisa; print(pyvisa.ResourceManager('@py').list_resources())"`} />
+
+## Step-by-step Setup Guide
+
+### Step 1: Install PyVISA
+
+Install the `python3-pyvisa` package using `apt`.
+   <Code language='bash' code={`sudo apt update
+sudo apt install -y python3-pyvisa`}
+   />
+
+### Step 2: Create a Udev Rule for USB Access
+
+These are the steps for adding a Udev rule that grant your user raw access to USB devices. For added security, you can instead grant access to a specific device only. See the "Adding a Udev Rule for a Specific USB Device" section below.
+
+1. **Create Udev Rule**: Create a udev rule to authorize raw USB access to a group called `usbgroup`.
+<Code language='bash' code={`sudo bash -c 'cat > /etc/udev/rules.d/99-usbgroup.rules <<EOF
+   SUBSYSTEM=="usb", GROUP="usbgroup", MODE="0666"
+   EOF'`}/>
+
+2. **Reload Udev Rules**: Reload the udev rules to apply the changes.
+   <Code language='bash' code={`sudo udevadm control --reload-rules
+   sudo udevadm trigger`}/>
+
+### Step 3: Create the `usbgroup` Group
+
+1. **Create Group**: Create a new group called `usbgroup`.
+   <Code language='bash' code={`sudo groupadd usbgroup`}/>
+
+### Step 4: Add Your User to the `usbgroup` Group
+
+1. **Add User to Group**: Add the current user to the `usbgroup` group.
+   <Code language='bash' code={`sudo usermod -aG usbgroup $USER`}/>
+
+### Step 5: Reboot Your System
+
+1. **Reboot**: Reboot your system to apply the changes.
+   <Code language='bash' code={`sudo reboot`}/>
+
+### Step 6: test your setup
+In the terminal:
+<Code language="bash" code={`python3 -c "import pyvisa; print(pyvisa.ResourceManager('@py').list_resources())"`} />
+
+You should see a list containing your device in the format `INTERFACE::VID::PID::SN::INSTR`.
+
+## Method Using the NI-VISA Backend
+
+### Step 1: Download NI-VISA
+
+1. **Download NI-VISA**: Visit the [NI-VISA download page](https://www.ni.com/en-us/support/downloads/drivers/download.ni-visa.html). You will need to register. Extract the archive, you should see `.deb` packages.
+
+### Step 2: Install NI-VISA for your distribution
+
+1. **Install NI-VISA**: Example for Ubuntu: install the downloaded `.deb` package using `dpkg`. There are two packages, a "stream" and fixed quarterly version. Use the fixed quarterly version for reproductibility.
+
+   <Code language='bash' code={`sudo dpkg -i ni-visa_*.deb
+   sudo apt update
+   sudo apt install -y ni-visa`}/>
+
+### Step 3: Configure PyVISA to Use NI-VISA Backend
+
+1. **Set NI-VISA Backend**: Ensure that PyVISA uses the NI-VISA backend.
+   <Code language='python' code={`import pyvisa
+   rm = pyvisa.ResourceManager('@ni')`}/>
+   A library path is also accepted such as `/usr/lib/x86_64-linux-gnu/libvisa.so`.
+   The path for pyvisa-py is `@pi`.
+
+### Step 4: Verify Device Connection
+
+1. **Use visaconf Utility**: Use the `visaconf` NI terminal utility to check your device's connection.
+
+2. **In Python**: <Code language="bash" code={`python3 -c "import pyvisa; print(pyvisa.ResourceManager('@py').list_resources())"`} />
+
+## Virtual Environment (venv)
+
+The `python3-pyvisa` and `python3-pyvisa-py` packages **must be installed system-wide** for the communication to work properly. After a venv can be used. Installing them in a virtual environment only will not work.
+Commands for installing in a venv:
+<Code language='bash' code={`pip install PyVISA PyVISA-py`}/>
+
+**Note:** the `python3-pyvisa` package also installs `python3-pyvisa-py` in debian-based distributions.
+`PyVisa-py` is a pure Python VISA backend that aims to replace the NI backend.
+
+## Adding a Udev Rule for a Specific USB Device
+
+### Step 1: Identify USB Device
+
+Use the `lsusb` command to find the vendor ID (VID) and product ID (PID) of your USB device.
+   <Code code={`Bus 003 Device 011: ID VID:PID Your SCPI / VISA compatible measuring instrument`}/>
+
+### Step 2: Create Udev Rule
+
+1. **Create Udev Rule**: Create a udev rule for your specific USB device.
+   <Code language='bash' code={`sudo bash -c 'cat > /etc/udev/rules.d/99-mydevice.rules <<EOF
+   SUBSYSTEM=="usb", ATTR{idVendor}=="VID", ATTR{idProduct}=="PID", GROUP="usbgroup", MODE="0666"
+   EOF'`}/>
+
+2. **Reload Udev Rules**: Reload the udev rules to apply the changes.
+   <Code language='bash' code={`sudo udevadm control --reload-rules
+   sudo udevadm trigger`}/>
+
+### Notes
+
+- **Firewall Settings**: For Ethernet devices, ensure your firewall settings allow communication with the instrument.
+- **Windows Fast Startup Interference**: Windows Fast Startup can prevent interfaces to reset properly and interfere with device detection.
