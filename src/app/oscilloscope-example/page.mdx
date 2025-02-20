@@ -1,0 +1,61 @@
+# Oscilloscope example
+
+This example connects to a Tektronix TBS1072B-EDU oscilloscope.
+It sets a trigger, waits for the trigger event, takes measurements and then prints the peak-to-peak amplitude and frequency of the signal with 3 significant figures.
+
+<Code language='python' code={`import pyvisa
+import time
+
+# Connect to the oscilloscope
+resource_manager = pyvisa.ResourceManager()
+oscope = resource_manager.open_resource("USB0::1689::872::C011501::0::INSTR")
+
+# Set time and voltage scales
+oscope.write("HORizontal:SCAle 500e-6")  # 500us/div
+oscope.write("CH1:SCAle 2.0")  # 2V/div
+
+# Set trigger level and mode
+oscope.write("TRIGger:MAIN:LEVel 2.5")  # Set trigger to 2.5V
+oscope.write("TRIGger:A:MODe NORMAL")  # Normal trigger mode
+oscope.write("TRIGger:A:EDGE:SOURce CH1")  # Trigger on CH1
+oscope.write("ACQuire:STOPafter SEQuence")  # Set one-shot mode
+oscope.write("ACQuire:STATE ON")  # Arm trigger
+
+# Wait for trigger event with timeout
+timeout = 5  # seconds
+start_time = time.time()
+
+while True:
+    status = oscope.query("TRIGger:STATE?").strip()
+    if status == "SAVE":
+        break
+    if time.time() - start_time > timeout:
+        print("Trigger timeout")
+        break
+    time.sleep(0.1)
+
+# Configure and retrieve frequency measurement
+oscope.write("MEASUrement:IMMed:SOURce CH1")
+oscope.write("MEASUrement:IMMed:TYPe FREQuency")
+frequency = oscope.query("MEASUrement:IMMed:VALue?").strip()
+
+# Configure and retrieve peak-to-peak voltage measurement
+oscope.write("MEASUrement:IMMed:SOURce CH1")
+oscope.write("MEASUrement:IMMed:TYPe PK2PK")
+peak_to_peak = oscope.query("MEASUrement:IMMed:VALue?").strip()
+
+# Format the measurements to 3 significant figures
+try:
+    frequency = f"{float(frequency):.3g}"
+    peak_to_peak = f"{float(peak_to_peak):.3g}"
+except ValueError:
+    frequency = "Invalid"
+    peak_to_peak = "Invalid"
+
+print(f"Frequency: {frequency} Hz")
+print(f"Peak-to-Peak: {peak_to_peak} V")
+
+# Close connection
+oscope.close()
+resource_manager.close()
+`}/>

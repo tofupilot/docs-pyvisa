@@ -257,34 +257,34 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Examples',
     links: [
-      { title: 'Multimeter', href: '/multimeter-example' },
+      //{ title: 'Multimeter', href: '/multimeter-example' },
       { title: 'Oscilloscope', href: '/oscilloscope-example' },
-      { title: 'Power Supply', href: '/power-supply-example' },
-      { title: 'Electronic Load', href: '/electronic-load-example' },
-      { title: 'RF Power Meter', href: '/RF-power-meter-example' },
+      //{ title: 'Power Supply', href: '/power-supply-example' },
+      //{ title: 'Electronic Load', href: '/electronic-load-example' },
+      //{ title: 'RF Power Meter', href: '/RF-power-meter-example' },
     ],
   },
-  {
-    title: 'Command Reference',
-    links: [
-      { title: 'Programming', href: '/programming-commands' },
-      { title: 'Query', href: '/query-commands' },
-      { title: 'Measurement', href: '/measurement-commands' },
-      { title: 'Status', href: '/status-commands' },
-      { title: 'Sense', href: '/sense-commands' },
-      { title: 'Source', href: '/source-commands' },
-      { title: 'System', href: '/system-commands' },
-      { title: 'Trigger', href: '/trigger-commands' },
-      { title: 'Bus-Specific', href: '/bus-specific-commands' },
-    ],
-  },
-  {
-    title: 'Test sequencing',
-    links: [
-      { title: 'Making an OpenHTF Plug', href: '/openhtf-plug' },
-      { title: 'Use in a Test Sequence', href: '/test-sequence' },
-    ],
-  },
+  // {
+  //   title: 'Command Reference',
+  //   links: [
+  //     { title: 'Programming', href: '/programming-commands' },
+  //     { title: 'Query', href: '/query-commands' },
+  //     { title: 'Measurement', href: '/measurement-commands' },
+  //     { title: 'Status', href: '/status-commands' },
+  //     { title: 'Sense', href: '/sense-commands' },
+  //     { title: 'Source', href: '/source-commands' },
+  //     { title: 'System', href: '/system-commands' },
+  //     { title: 'Trigger', href: '/trigger-commands' },
+  //     { title: 'Bus-Specific', href: '/bus-specific-commands' },
+  //   ],
+  // },
+  // {
+  //   title: 'Test sequencing',
+  //   links: [
+  //     { title: 'Making an OpenHTF Plug', href: '/openhtf-plug' },
+  //     { title: 'Use in a Test Sequence', href: '/test-sequence' },
+  //   ],
+  // },
 ]
 
 export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
