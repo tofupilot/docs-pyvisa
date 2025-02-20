@@ -6,6 +6,7 @@ export const metadata = {
 # Windows Setup
 
 ## 1. Download the NI-VISA Driver
+
 Go to the [NI website](https://www.ni.com/en/support/downloads/drivers/download.ni-visa.html) and register. Then download the latest version of the [NI Package Manager](https://www.ni.com/en/support/downloads/drivers/download.ni-visa.html).
 
 ## 2. Install the NI-VISA Driver
@@ -88,3 +89,11 @@ If your device does not appear, try specifying your VISA runtime DLL:
 
 ### VISA Version Incompatibility and Conflicts
 Manufacturer-specific VISA versions can cause conflicts. The recommendation is to uninstall the manufacturer's version and install the NI version alone.
+
+### Termination characters
+Some devices expect **termination characters** at the end of the commands.
+Refer to the device's manual but the most common characters are '\n' and '\r\n'.
+In this case after instanciating your instrument:
+
+<Code language='python' code={`inst.read_termination = "\\n"  # Line Feed (LF) (Common)
+inst.write_termination = "\\r\\n"  # Carriage Return + Line Feed, for Serial, just \\n for others`}/>

@@ -1,0 +1,95 @@
+# Interface configuration
+
+Before setting up PyVISA you need to setup your interface.
+
+## USB
+
+### Windows
+
+After following the [NI-VISA + PyVISA install guide](/windows-setup) it works out of the box.
+
+### Linux
+You will need to add a Udev rule that grant your user raw access to USB devices.
+For added security, you can instead grant access to a specific device only (see note below).
+
+1. **Create Group**: Create a new group called `usbgroup`.
+   <Code language='bash' code={`sudo groupadd usbgroup`}/>
+
+1. **Add User to Group**: Add the current user to the `usbgroup` group.
+   <Code language='bash' code={`sudo usermod -aG usbgroup $USER`}/>
+
+1. **Create Udev Rule**: Create a udev rule to authorize raw USB access to a group called `usbgroup`.
+<Code language='bash' code={`sudo bash -c 'cat > /etc/udev/rules.d/99-usbgroup.rules <<EOF
+   SUBSYSTEM=="usb", GROUP="usbgroup", MODE="0666"
+   EOF'`}/>
+
+1. **Reload Udev Rules**: Reload the udev rules to apply the changes.
+   <Code language='bash' code={`sudo udevadm control --reload-rules
+   sudo udevadm trigger`}/>
+
+1. **Reboot** your system: `sudo reboot`
+
+Now go to the [Linux PyVISA setup](/linux-setup).
+
+**Note:** adding a Udev Rule for a Specific USB Device
+
+1. Identify USB Device
+
+Use the `lsusb` command to find the vendor ID (VID) and product ID (PID) of your USB device.
+   <Code code={`Bus 003 Device 011: ID VID:PID Your SCPI / VISA compatible measuring instrument`}/>
+
+1. **Create Udev Rule**: Create a udev rule for your specific USB device.
+   <Code language='bash' code={`sudo bash -c 'cat > /etc/udev/rules.d/99-mydevice.rules <<EOF
+   SUBSYSTEM=="usb", ATTR{idVendor}=="VID", ATTR{idProduct}=="PID", GROUP="usbgroup", MODE="0666"
+   EOF'`}/>
+
+1. **Reload Udev Rules**: Reload the udev rules to apply the changes.
+   <Code language='bash' code={`sudo udevadm control --reload-rules
+   sudo udevadm trigger`}/>
+
+1. **Reboot**.
+
+## Ethernet
+
+No special drivers are needed, it works out of the box in all OS.
+Skip to the [Windows PyVISA setup](/windows-setup) or the [Linux PyVISA setup](/linux-setup).
+
+### Notes
+
+- Your PC's firewall need to allow traffic on the instrument's port.
+Standard ports for protocols VXI-11: `TCP 111`, HiSLIP: `TCP 4880`.
+- For raw sockets, specify the instrument's IP and port in its address: `TCPIP::<IP>::<PORT>`.
+
+## GPIB (IEEE488)
+
+This interface requires a GPIB controller or a GPIB to USB adapter.
+These adapters are quite expensive, often over $150 for the cheapest ones.
+A cheaper Open-Source alternative exists for hobbyists: [UsbGpib](https://github.com/xyphro/UsbGpib).
+
+### Windows
+
+Install your adapter's drivers and go to the [NI-VISA + PyVISA install guide](/windows-setup).
+
+### Linux
+
+If you are using an NI or Agilent card, the linux-gpib drivers should be installed.
+It is not a trivial setup and you should refer to [Tom Verbeure's guide](https://tomverbeure.github.io/2023/01/29/Installing-Linux-GPIB-Drivers-for-the-Agilent-82357B.html).
+
+The [UsbGpib's GitHub repo](https://github.com/xyphro/UsbGpib/tree/master/SW/NiceGUI) documents it's setup.
+
+## Serial / RS232
+
+### Windows
+
+Works out of the box.
+Serial VISA adress format expected: `ASRL<X>::INSTR`
+
+### Linux
+For Linux (and UNIX) users, add your user to the `dialout` group: 
+<Code language="python" code={`sudo usermod -aG dialout $USER`}/>
+Serial VISA adress format expected: `ASRL/dev/ttyUSB<X>::INSTR` or `ASRL<X>::INSTR`.
+
+## PXI
+For PXI chassis, refer to the [NI PXI Platform Services website](https://www.ni.com/en/support/downloads/drivers/download.pxi-platform-services.html).
+Drivers are available for Windows and Linux.
+
