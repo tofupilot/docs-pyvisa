@@ -261,7 +261,8 @@ export const navigation: Array<NavGroup> = [
       { title: 'Oscilloscope', href: '/oscilloscope-example' },
       { title: 'Power Supply', href: '/power-supply-example' },
       //{ title: 'Electronic Load', href: '/electronic-load-example' },
-      //{ title: 'RF Power Meter', href: '/RF-power-meter-example' },
+      //{ title: 'RF Power Meter', href: '/RF-po
+      // wer-meter-example' },
     ],
   },
   // {

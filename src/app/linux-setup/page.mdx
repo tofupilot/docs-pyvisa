@@ -1,6 +1,20 @@
+import { defaultKeywords, defaultOpenGraph } from '../metadata'
+
 export const metadata = {
-  title: 'PyVISA',
-  description: 'This guide explains how to setup PyVISA on Windows and Linux.',
+   title: 'Linux Setup',
+   description: 'This guide explains how to setup PyVISA on Linux.',
+   keywords: [
+      ...defaultKeywords,
+      'linux setup',
+      'linux configuration', 
+      'ni-visa',
+      'pyvisa-py'
+   ],
+   openGraph: {
+      ...defaultOpenGraph,
+      title: 'Linux Setup Guide | PyVISA Documentation',
+      description: 'Complete guide to setup PyVISA on Linux including NI-VISA and pyvisa-py backends.',
+   },
 }
 
 # Linux Setup

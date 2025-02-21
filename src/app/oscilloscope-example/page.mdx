@@ -1,6 +1,27 @@
-# Oscilloscope example
+import { defaultKeywords, defaultOpenGraph } from '../metadata'
 
-This example connects to a Tektronix TBS1072B-EDU oscilloscope.
+export const metadata = {
+    title: 'Oscilloscope Control Example',
+    description: 'Control a Tektronix TBS1072B-EDU oscilloscope using PyVISA to set triggers, capture measurements, and read signal parameters.',
+    keywords: [
+        ...defaultKeywords,
+        'oscilloscope',
+        'tektronix',
+        'tbs1072b',
+        'waveform capture',
+        'trigger setup',
+        'signal measurement',
+    ],
+    openGraph: {
+        ...defaultOpenGraph,
+        title: 'Oscilloscope Control Example with PyVISA',
+        description: 'Learn how to control a Tektronix oscilloscope with Python and PyVISA - includes trigger setup, measurement capture, and signal analysis.',
+    },
+}
+
+# Oscilloscope Control Example
+
+This example connects to a Tektronix TBS1072B-EDU oscilloscope over USB.
 It sets a trigger, waits for the trigger event, takes measurements and then prints the peak-to-peak amplitude and frequency of the signal with 3 significant figures.
 
 <Code language='python' code={`import pyvisa

@@ -1,3 +1,25 @@
+import { defaultKeywords, defaultOpenGraph } from '../metadata'
+
+export const metadata = {
+    title: 'Power Supply Control Example',
+    description: 'Control a GW Instek GPD-4303S power supply using PyVISA to set voltage, current, and monitor operating modes.',
+    keywords: [
+        ...defaultKeywords,
+        'power supply',
+        'gw instek',
+        'gpd-4303s',
+        'voltage control',
+        'current control',
+        'cv mode',
+        'cc mode',
+    ],
+    openGraph: {
+        ...defaultOpenGraph,
+        title: 'Power Supply Control Example with PyVISA',
+        description: 'Learn how to control a GW Instek power supply with Python and PyVISA - includes voltage/current setting and mode monitoring.',
+    },
+}
+
 # Power Supply Control Example
 
 This Python script uses PyVISA to control a GW Instek GPD-4303S power supply.

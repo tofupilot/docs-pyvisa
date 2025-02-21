@@ -1,6 +1,21 @@
+import { defaultKeywords, defaultOpenGraph } from './metadata'
+
 export const metadata = {
-  title: 'PyVISA',
-  description: 'This guide explains how to setup PyVISA on Windows and Linux.',
+  title: 'What is PyVISA?',
+  description: 'PyVISA presentation, a Python wrapper for the VISA driver that enables controlling measurement instruments using Python.',
+  keywords: [
+    ...defaultKeywords,
+    'what is pyvisa',
+    'introduction',
+    'getting started',
+    'oscilloscope control',
+    'scpi commands',
+  ],
+  openGraph: {
+    ...defaultOpenGraph,
+    title: 'What is PyVISA? - Introduction to Instrument Control | PyVISA Documentation',
+    description: 'Introduction to PyVISA - Learn how to control measurement instruments like oscilloscopes using Python and SCPI commands.',
+  },
 }
 
 # What is PyVISA?

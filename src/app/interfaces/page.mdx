@@ -1,3 +1,27 @@
+import { defaultKeywords, defaultOpenGraph } from '../metadata'
+
+export const metadata = {
+   title: 'Interface Configuration',
+   description: 'Setup guide for USB, Ethernet, GPIB, Serial and PXI interfaces required by PyVISA to control measurement instruments.',
+   keywords: [
+      ...defaultKeywords,
+      'interface setup',
+      'usb setup',
+      'ethernet setup',
+      'gpib setup',
+      'serial setup',
+      'pxi setup',
+      'linux setup',
+      'windows setup',
+   ],
+   openGraph: {
+      ...defaultOpenGraph,
+      title: 'Interface Configuration - USB, GPIB, Serial Setup | PyVISA Documentation',
+      description: 'Complete guide to setup USB, Ethernet, GPIB, Serial and PXI interfaces for instrument control with PyVISA.',
+   },
+}
+
+
 # Interface configuration
 
 Before setting up PyVISA you need to setup your interface.

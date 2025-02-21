@@ -1,6 +1,24 @@
+import { defaultKeywords, defaultOpenGraph } from '../metadata'
+
 export const metadata = {
-  title: 'PyVISA',
-  description: 'This guide explains how to setup PyVISA on Windows and Linux.',
+  title: 'Windows Setup',
+  description: 'Step-by-step guide to setting up PyVISA on Windows, including NI-VISA driver installation and Python environment configuration.',
+  keywords: [
+    ...defaultKeywords,
+    'windows',
+    'setup',
+    'installation',
+    'ni-visa',
+    'driver',
+    'configuration',
+    'virtual environment',
+    'fast startup',
+  ],
+  openGraph: {
+    ...defaultOpenGraph,
+    title: 'Windows Setup Guide for PyVISA',
+    description: 'Complete guide for setting up PyVISA on Windows - includes NI-VISA installation, Python configuration, and troubleshooting tips.',
+  },
 }
 
 # Windows Setup
