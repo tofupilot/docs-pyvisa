@@ -1,0 +1,64 @@
+# Power Supply Control Example
+
+This Python script uses PyVISA to control a GW Instek GPD-4303S power supply.
+It sets a voltage and current limits for two channels, reads their output values, and determines their operating modes (CV or CC).
+The interface here is Serial over USB.
+
+<Code language='python' code={`import pyvisa
+import time
+
+# Create a resource manager
+rm = pyvisa.ResourceManager()
+
+# Connect to the power supply (update the VISA address as needed)
+ps = rm.open_resource("ASRL/dev/ttyUSB0::INSTR",
+                      baud_rate=115200,
+                      write_termination="\\n",
+                      read_termination="\\r\\n")
+        
+try:
+    # Print the power supply model
+    model = ps.query("*IDN?")
+    print(f"PSU model: {model}")
+
+    # Set voltage and current limits for channels 1 and 2
+    ps.write("VSET1:10.0")    # Set CH1 voltage to 10V
+    ps.write("ISET1:0.5")     # Set CH1 current to 0.5A
+    ps.write("VSET2:19.0")    # Set CH2 voltage to 19V
+    ps.write("ISET2:0.1")     # Set CH2 current to 0.1A
+
+    # Turn output on
+    ps.write("OUT1")
+
+    # Wait 2 seconds
+    time.sleep(2)
+
+    # Read voltage and current values
+    voltage1 = ps.query("VOUT1?")
+    voltage2 = ps.query("VOUT2?")
+    current1 = ps.query("IOUT1?")
+    current2 = ps.query("IOUT2?")
+
+    # Print voltage and current values
+    print(f"Channel 1: {voltage1} V, {current1} A")
+    print(f"Channel 2: {voltage2} V, {current2} A")
+
+    # Check if CH1 is in CC or CV mode
+    status = ps.query("STATUS?")
+    
+    # Remember that all commands return strings
+    ch1_mode = "CV" if status[0] == '1' else "CC"
+    ch2_mode = "CV" if status[1] == '1' else "CC"
+
+    # Print channel modes
+    print(f"Channel 1 is in {ch1_mode} mode")
+    print(f"Channel 2 is in {ch2_mode} mode")
+
+    # Turn output off
+    ps.write("OUT0")
+
+finally:
+    # Close connection
+    ps.close()
+    rm.close()
+`}/>
