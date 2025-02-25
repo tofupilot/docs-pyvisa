@@ -76,9 +76,5 @@ Commands for installing in a venv:
 
 - **Firewall Settings**: For Ethernet devices, ensure your firewall settings allow communication with the instrument.
 - **Windows Fast Startup Interference**: Windows Fast Startup can prevent interfaces to reset properly and interfere with device detection.
-- Some devices expect **termination characters** at the end of the commands.
-Refer to the device's manual but the most common characters are '\n' and '\r\n'.
-In this case after instanciating your instrument:
+- Some devices expect **termination characters** at the end of the commands. Please refer to the [dedicated section](/interfaces#termination-characters) on the Interfaces page.
 
-<Code language='python' code={`inst.read_termination = "\\n"  # Line Feed (LF) (Common)
-inst.write_termination = "\\r\\n"  # Carriage Return + Line Feed, for Serial, just \\n for others`}/>

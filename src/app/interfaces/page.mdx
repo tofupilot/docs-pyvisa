@@ -27,6 +27,10 @@ export const metadata = {
 Before setting up PyVISA you need to setup your interface.
 
 ## USB
+---
+### Notes
+- For Serial over USB, refer to the [Serial / RS232](#serial-rs-232) section.
+- An example script for a USB oscilloscope is available [here](/oscilloscope-example).
 
 ### Windows
 
@@ -74,6 +78,7 @@ Use the `lsusb` command to find the vendor ID (VID) and product ID (PID) of your
 1. **Reboot**.
 
 ## Ethernet
+---
 
 No special drivers are needed, it works out of the box in all OS.
 Skip to the [Windows PyVISA setup](/windows-setup) or the [Linux PyVISA setup](/linux-setup).
@@ -85,7 +90,7 @@ Standard ports for protocols VXI-11: `TCP 111`, HiSLIP: `TCP 4880`.
 - For raw sockets, specify the instrument's IP and port in its address: `TCPIP::<IP>::<PORT>`.
 
 ## GPIB (IEEE488)
-
+---
 This interface requires a GPIB controller or a GPIB to USB adapter.
 These adapters are quite expensive, often over $150 for the cheapest ones.
 A cheaper Open-Source alternative exists for hobbyists: [UsbGpib](https://github.com/xyphro/UsbGpib).
@@ -102,6 +107,10 @@ It is not a trivial setup and you should refer to [Tom Verbeure's guide](https:/
 The [UsbGpib's GitHub repo](https://github.com/xyphro/UsbGpib/tree/master/SW/NiceGUI) documents it's setup.
 
 ## Serial / RS232
+---
+### Notes
+- An example script for a serial power supply is available [here](/power-supply-example).
+- You may need to set the baud rate of the connection using the `baud_rate` parameter in the `open_resource` method. Ex: `open_resource("ASRL1::INSTR", baud_rate=115200)`.
 
 ### Windows
 
@@ -117,3 +126,14 @@ Serial VISA adress format expected: `ASRL/dev/ttyUSB<X>::INSTR` or `ASRL<X>::INS
 For PXI chassis, refer to the [NI PXI Platform Services website](https://www.ni.com/en/support/downloads/drivers/download.pxi-platform-services.html).
 Drivers are available for Windows and Linux.
 
+## Termination Characters
+---
+
+Some devices expect **termination characters** at the end of the commands and send them at the end of answers.
+Refer to the device's manual but the most common characters are `\n` , `r`, and `\r\n`.
+For serial, the default is no write termination and `\r` for read termination.
+
+**Example:**
+
+<Code language='python' code={`inst.read_termination = "\\n"  # Line Feed (LF)
+inst.write_termination = "\\r"  # Carriage Return + Line Feed`}/>

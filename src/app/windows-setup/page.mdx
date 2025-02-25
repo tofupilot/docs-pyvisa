@@ -108,10 +108,5 @@ If your device does not appear, try specifying your VISA runtime DLL:
 ### VISA Version Incompatibility and Conflicts
 Manufacturer-specific VISA versions can cause conflicts. The recommendation is to uninstall the manufacturer's version and install the NI version alone.
 
-### Termination characters
-Some devices expect **termination characters** at the end of the commands.
-Refer to the device's manual but the most common characters are '\n' and '\r\n'.
-In this case after instanciating your instrument:
-
-<Code language='python' code={`inst.read_termination = "\\n"  # Line Feed (LF) (Common)
-inst.write_termination = "\\r\\n"  # Carriage Return + Line Feed, for Serial, just \\n for others`}/>
+### Termination Characters
+Some instruments require termination characters. Please refer to the [dedicated section](/interfaces#termination-characters) on the Interfaces page.

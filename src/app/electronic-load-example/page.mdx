@@ -1,0 +1,57 @@
+import { defaultKeywords, defaultOpenGraph } from '../metadata'
+
+export const metadata = {
+    title: 'Electronic Load Example',
+    description: 'Control a Siglent SDL1000X electronic load using PyVISA to perform discharge testing and voltage measurements over Ethernet.',
+    keywords: [
+        ...defaultKeywords,
+        'electronic load',
+        'siglent',
+        'sdl1000x',
+        'discharge test',
+        'constant current',
+        'voltage measurement',
+    ],
+    openGraph: {
+        ...defaultOpenGraph,
+        title: 'Electronic Load Control Example with PyVISA',
+        description: 'Learn how to control a Siglent electronic load with Python and PyVISA - includes constant current mode, discharge testing, and voltage measurements.',
+    },
+}
+
+# Electronic Load Example
+
+This examples features a SDL1000X electronic load from Siglent, connected via **Ethernet**.
+The load is connected to a battery or capacitor bank and measures its voltage before, during, and after a 5-second discharge test at 3 A.
+
+<Code language="python" code={`import pyvisa
+import time
+
+try:
+    inst = pyvisa.ResourceManager().open_resource("TCPIP0::192.168.1.50::inst0::INSTR")
+    
+    # Measure initial voltage
+    voltage = float(inst.query("MEASure:VOLTage?"))
+    print(f"Initial voltage: {voltage}V")
+
+    # Set constant current mode and current value
+    inst.write("SOURce:FUNCtion:MODE CURRent")
+    inst.write("SOURce:CURRent:LEVel:IMMediate 3")
+    inst.write("INPut:STATe ON")
+
+    # Measure voltage during operation
+    for i in range(4):
+        time.sleep(1)
+        voltage = float(inst.query("MEASure:VOLTage?"))
+        print(f"During operation voltage {i+1}: {voltage}V")
+
+    # Wait remaining time and turn off
+    time.sleep(1)
+    inst.write("INPut:STATe OFF")
+
+    # Measure final voltage
+    voltage = float(inst.query("MEASure:VOLTage?"))
+    print(f"Final voltage: {voltage}V")
+
+finally:
+    inst.close()`}/>
