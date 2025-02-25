@@ -1,0 +1,177 @@
+import { defaultMetadata } from '../metadata'
+
+export const metadata = {
+  ...defaultMetadata,
+  title: 'PyVISA API Reference',
+  description:
+    'A guide to the PyVISA API, describing the Python module\'s structure, classes, methods, and usage examples for controlling measurement instruments using the VISA standard.',
+  keywords: [
+    ...defaultMetadata.keywords,
+    'api reference',
+    'pyvisa module',
+    'ResourceManager',
+  ],
+  openGraph: {
+    ...defaultMetadata.openGraph,
+    title: 'PyVISA API Reference',
+    description:
+      'PyVISA API practical documentation of classes, methods, with usage examples.',
+  },
+}
+
+# PyVISA API Reference
+
+## `pyvisa` Module
+
+Import the `pyvisa` module to start using its components:
+
+<Code language="python" code={`import pyvisa
+# List all VISA resources
+pyvisa.ResourceManager().list_resources()`} />
+
+## `ResourceManager`
+
+_Class within the pyvisa module_
+
+The `ResourceManager` manages VISA resources and sessions. These resources represent the instruments you want to control.
+
+### Methods
+
+- **`list_resources(query='?*::INSTR')`**
+  - Returns a list of available VISA resources matching the query.
+  - **Parameters:**
+    - `query` (str): A VISA resource query string. The default is `'?*::INSTR'`.
+  - **Returns:**
+    - A list of resource strings that match the query.
+
+- **`open_resource(resource_name)`**
+  - Opens a connection to a VISA instrument, returns an `Instrument` object.
+- **Parameters:**
+    - `resource_name` (str): The VISA instrument to open. Common formats:
+        - GPIB: `'GPIB0::20::INSTR'`
+        - USB: `'USB0::VID::PID::SerialNumber::INSTR'`
+        - Serial: `'ASRL1::INSTR'`
+        - TCP/IP: `'TCPIP0::192.168.1.42::INSTR'`
+        
+        See the [interfaces](/interfaces) page for setup instructions (Windows / Linux).
+- **Returns:**
+    - An `Instrument` object representing the opened resource.
+
+- **`close()`**
+  - Closes the Resource Manager and cleans up any allocated resources.
+
+### Attributes
+
+- **`session`**
+  - The VISA session handle.
+
+## `Instrument`
+
+_The `Instrument` class is returned by the `open_resource()` method of the `ResourceManager`._
+
+This is the class used to communicate with instruments.
+
+### Lifecycle
+
+- **Instantiation:**
+
+  <Code language="python" code={`instrument = resource_manager.open_resource('GPIB0::1::INSTR')`} />
+
+- **Closing/Cleanup:**
+
+  <Code language="python" code={`instrument.close()`} />
+
+  This properly releases the connection to the instrument.
+
+### Methods
+
+- **`write(message)`**
+  - Sends a command to the instrument.
+  - **Parameters:**
+    - `message` (str): The command string to send.
+
+- **`read()`**
+  - Reads data from the instrument.
+  - **Returns:**
+    - The data read from the instrument as a string.
+
+- **`query(message)`**
+  - Sends a command to the instrument and reads the response.
+  - **Parameters:**
+    - `message` (str): The command string to send.
+  - **Returns:**
+    - The response from the instrument as a string.
+
+- **`ask(message)`**
+  - An alias for `query`.
+
+- **`read_values(format=None)`**
+  - Reads a list of values from the instrument.
+  - **Parameters:**
+    - `format` (str, optional): The format of the values to read. Default is `None`.
+  - **Returns:**
+    - A list of values obtained from the instrument.
+
+- **`clear()`**
+  - Resets the device.
+
+- **`trigger()`**
+  - Sends a trigger signal to the instrument.
+
+### Attributes
+
+- **`timeout`**
+  - The timeout for read/write operations.
+
+- **`chunk_size`**
+    - The size of data chunks (in bytes) **for read operations**.
+    - Affects both ASCII and binary transfers.
+    - Default is 20 480 bytes (20KB).
+    - For optimizing performance when reading large amounts of data.
+
+- **`values_format`**
+  - The data format used for lists of read values.
+
+- **`term_chars`**
+  - The termination characters used in read and write operations.
+
+## Constants
+
+### Constants and Status Codes
+
+PyVISA provides several constants for checking operation status and configuring instruments:
+
+- **`constants.StatusCode`**
+    - `VI_SUCCESS`
+    - `VI_ERROR_TMO` / `VI_ERROR_TIMEOUT`
+    - `VI_ERROR_INV_OBJECT`: Invalid object/session reference
+    - `VI_ERROR_NSUP_OPER`: Operation not supported
+
+Example usage:
+<Code language="python" code={`import pyvisa
+
+rm = pyvisa.ResourceManager()
+try:
+        instr = rm.open_resource('GPIB0::10::INSTR')
+        status = instr.write('*IDN?')
+        if status == pyvisa.constants.StatusCode.success:
+                print('Command sent successfully')
+except pyvisa.VisaIOError as e:
+        if e.error_code == pyvisa.constants.VI_ERROR_TMO:
+                print('Operation timed out')`} />
+
+- **`constants.InterfaceType`**
+    - `GPIB`, `ASRL`, `USB`, `TCPIP`: Constants for interface types
+    - Used for identifying resource types and filtering
+
+- **`constants.AccessModes`**
+    - `NO_LOCK`, `EXCLUSIVE_LOCK`, `SHARED_LOCK`
+    - Control access permissions when opening resources
+
+## Exceptions
+
+- **`VisaIOError`**
+  - Raised when a VISA I/O operation fails.
+
+- **`InvalidSession`**
+  - Raised when an operation is attempted on an invalid session, such as a closed or disconnected instrument.

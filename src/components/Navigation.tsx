@@ -247,7 +247,7 @@ export const navigation: Array<NavGroup> = [
     ],
   },
   {
-    title: 'Guides',
+    title: 'Getting Started Guides',
     links: [
       { title: 'Interface Configuration', href: '/interfaces' },
       { title: 'Windows Setup', href: '/windows-setup' },
@@ -265,9 +265,10 @@ export const navigation: Array<NavGroup> = [
       // wer-meter-example' },
     ],
   },
-  // {
-  //   title: 'Command Reference',
-  //   links: [
+  {
+    title: 'Command Reference',
+    links: [
+      { title: 'Module Structure', href: '/base-commands' },
   //     { title: 'Programming', href: '/programming-commands' },
   //     { title: 'Query', href: '/query-commands' },
   //     { title: 'Measurement', href: '/measurement-commands' },
@@ -277,8 +278,8 @@ export const navigation: Array<NavGroup> = [
   //     { title: 'System', href: '/system-commands' },
   //     { title: 'Trigger', href: '/trigger-commands' },
   //     { title: 'Bus-Specific', href: '/bus-specific-commands' },
-  //   ],
-  // },
+    ],
+  },
   // {
   //   title: 'Test sequencing',
   //   links: [
