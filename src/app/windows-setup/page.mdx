@@ -25,7 +25,7 @@ export const metadata = {
 
 ## 1. Download the NI-VISA Driver
 
-Go to the [NI website](https://www.ni.com/en/support/downloads/drivers/download.ni-visa.html) and register. Then download the latest version of the [NI Package Manager](https://www.ni.com/en/support/downloads/drivers/download.ni-visa.html).
+Registration is needed before download: [NI registration page](https://lumen.ni.com/nicif/us/header_login/content.xhtml?action=create). Then download the [NI Package Manager](https://www.ni.com/en/support/downloads/drivers/download.ni-visa.html).
 
 ## 2. Install the NI-VISA Driver
 
@@ -58,8 +58,8 @@ The VISA runtime is installed regardless of your selection. You will need to reb
 
 ## 3. Installing PyVISA
 
-First, you need to have Python installed.
-On Windows, it is available via the Microsoft Store.
+PyVISA supports Python 3.6+.
+On Windows, Python is available via the Microsoft Store or can be installed from the official [Python website](https://www.python.org/downloitads/).
 
 ### Set Up a Virtual Environment (Optional, Recommended)
 
@@ -69,11 +69,11 @@ Get the `virtualenv` package from the command line:
 Then navigate to your project folder and create the virtual environment:
 <Code language="sh" code={`python -m venv .venv`} />
 
-You will probably have to [change the Windows script execution policy](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.5) to be able to enter the virtual environment.
+You will have to [change the Windows script execution policy](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.5) to be able to activate the virtual environment.
 
 The safest way to do it would be:
 <Code language="sh" code={`Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`} />
-However, you must run this command again after closing the terminal.
+However, it is not the most practical, you must run this command for each new terminal session.
 
 Then enter the virtual environment:
 <Code language="sh" code={`.venv\Scripts\activate`} />

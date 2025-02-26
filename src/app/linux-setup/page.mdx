@@ -37,9 +37,9 @@ You should see a list containing your device in the format `INTERFACE::VID::PID:
 ## Method Using the NI-VISA Backend
 _Install these if you still do not see your device, for most interfaces pyvisa-py is sufficient._
 
-### Step 1: Download NI-VISA
+### Step 1: Get the NI-VISA driver and backend
 
-1. **Download NI-VISA**: Visit the [NI-VISA download page](https://www.ni.com/en-us/support/downloads/drivers/download.ni-visa.html). You will need to register. Extract the archive, you should see `.deb` packages.
+1. **Download the NI package**: Visit the [NI-VISA download page](https://www.ni.com/en-us/support/downloads/drivers/download.ni-visa.html). Unfortunately, registration is needed. Extract the archive, you should see `.deb` packages.
 
 ### Step 2: Install NI-VISA for your distribution
 
@@ -54,7 +54,7 @@ _Install these if you still do not see your device, for most interfaces pyvisa-p
 1. **Set NI-VISA Backend**: Ensure that PyVISA uses the NI-VISA backend.
    <Code language='python' code={`import pyvisa
    rm = pyvisa.ResourceManager('@ni')`}/>
-   A library path is also accepted such as `/usr/lib/x86_64-linux-gnu/libvisa.so`.
+   You can also provide a direct library path, for example: `/usr/lib/x86_64-linux-gnu/libvisa.so`.
    The path for pyvisa-py is `@pi`.
 
 ### Step 4: Verify Device Connection
@@ -65,12 +65,12 @@ _Install these if you still do not see your device, for most interfaces pyvisa-p
 
 ## Virtual Environment (venv)
 
-The `python3-pyvisa` and `python3-pyvisa-py` packages **must be installed system-wide** for the communication to work properly. After a venv can be used. Installing them in a virtual environment only will not work.
+The `python3-pyvisa` and `python3-pyvisa-py` packages **must be installed system-wide**. After a venv can be used. Installing them in a virtual environment only will not work.
 Commands for installing in a venv:
 <Code language='bash' code={`pip install PyVISA PyVISA-py`}/>
 
-**Note:** the `python3-pyvisa` package also installs `python3-pyvisa-py` in debian-based distributions.
-`PyVisa-py` is a pure Python VISA backend that aims to replace the NI backend.
+**Note:** installing the `python3-pyvisa` package also installs `python3-pyvisa-py` in debian-based distributions by default.
+`PyVisa-py` is a Python VISA backend that replaces the NI backend.
 
 ### Notes
 

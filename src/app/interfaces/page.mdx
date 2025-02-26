@@ -17,7 +17,7 @@ export const metadata = {
    openGraph: {
       ...defaultOpenGraph,
       title: 'Interface Configuration - USB, GPIB, Serial Setup | PyVISA Documentation',
-      description: 'Complete guide to setup USB, Ethernet, GPIB, Serial and PXI interfaces for instrument control with PyVISA.',
+      description: 'Practical guide to setup USB, Ethernet, GPIB, Serial and PXI interfaces for instrument control with PyVISA.',
    },
 }
 
@@ -29,8 +29,8 @@ Before setting up PyVISA you need to setup your interface.
 ## USB
 ---
 ### Notes
-- For Serial over USB, refer to the [Serial / RS232](#serial-rs-232) section.
-- An example script for a USB oscilloscope is available [here](/oscilloscope-example).
+- For Serial over USB, read the [Serial / RS232](#serial-rs-232) section.
+- See [here for a USB oscilloscope example script](/oscilloscope-example).
 
 ### Windows
 
@@ -46,12 +46,12 @@ For added security, you can instead grant access to a specific device only (see 
 1. **Add User to Group**: Add the current user to the `usbgroup` group.
    <Code language='bash' code={`sudo usermod -aG usbgroup $USER`}/>
 
-1. **Create Udev Rule**: Create a udev rule to authorize raw USB access to a group called `usbgroup`.
+1. **Create Udev Rule**: Authorize raw USB access to a group called `usbgroup`.
 <Code language='bash' code={`sudo bash -c 'cat > /etc/udev/rules.d/99-usbgroup.rules <<EOF
    SUBSYSTEM=="usb", GROUP="usbgroup", MODE="0666"
    EOF'`}/>
 
-1. **Reload Udev Rules**: Reload the udev rules to apply the changes.
+1. **Reload Udev Rules**: to apply the changes.
    <Code language='bash' code={`sudo udevadm control --reload-rules
    sudo udevadm trigger`}/>
 
@@ -63,7 +63,7 @@ Now go to the [Linux PyVISA setup](/linux-setup).
 
 1. Identify USB Device
 
-Use the `lsusb` command to find the vendor ID (VID) and product ID (PID) of your USB device.
+Use `lsusb` to find the vendor ID (VID) and product ID (PID) of your USB device.
    <Code code={`Bus 003 Device 011: ID VID:PID Your SCPI / VISA compatible measuring instrument`}/>
 
 1. **Create Udev Rule**: Create a udev rule for your specific USB device.
@@ -71,11 +71,11 @@ Use the `lsusb` command to find the vendor ID (VID) and product ID (PID) of your
    SUBSYSTEM=="usb", ATTR{idVendor}=="VID", ATTR{idProduct}=="PID", GROUP="usbgroup", MODE="0666"
    EOF'`}/>
 
-1. **Reload Udev Rules**: Reload the udev rules to apply the changes.
+1. **Reload Udev Rules**: to apply changes.
    <Code language='bash' code={`sudo udevadm control --reload-rules
    sudo udevadm trigger`}/>
 
-1. **Reboot**.
+1. **Reboot** if needed.
 
 ## Ethernet
 ---

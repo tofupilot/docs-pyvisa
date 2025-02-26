@@ -22,6 +22,7 @@ export const metadata = {
 # PyVISA API Reference
 
 ## `pyvisa` Module
+---
 
 Import the `pyvisa` module to start using its components:
 
@@ -30,6 +31,7 @@ Import the `pyvisa` module to start using its components:
 pyvisa.ResourceManager().list_resources()`} />
 
 ## `ResourceManager`
+---
 
 _Class within the pyvisa module_
 
@@ -66,6 +68,7 @@ The `ResourceManager` manages VISA resources and sessions. These resources repre
   - The VISA session handle.
 
 ## `Instrument`
+---
 
 _The `Instrument` class is returned by the `open_resource()` method of the `ResourceManager`._
 
@@ -136,6 +139,7 @@ This is the class used to communicate with instruments.
   - The termination characters used in read and write operations.
 
 ## Constants
+---
 
 ### Constants and Status Codes
 
@@ -169,6 +173,7 @@ except pyvisa.VisaIOError as e:
     - Control access permissions when opening resources
 
 ## Exceptions
+---
 
 - **`VisaIOError`**
   - Raised when a VISA I/O operation fails.
