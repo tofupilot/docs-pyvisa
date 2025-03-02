@@ -238,17 +238,9 @@ function NavigationGroup({
 
 export const navigation: Array<NavGroup> = [
   {
-    title: 'Presentation',
-    links: [
-      {
-        title: 'What is PyVISA',
-        href: '/',
-      }
-    ],
-  },
-  {
     title: 'Getting Started Guides',
     links: [
+      { title: 'What is PyVISA', href: '/'},
       { title: 'Interface Configuration', href: '/interfaces' },
       { title: 'Windows Setup', href: '/windows-setup' },
       { title: 'Linux Setup', href: '/linux-setup' },
@@ -268,7 +260,7 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Command Reference',
     links: [
-      { title: 'Module Structure', href: '/base-commands' },
+      { title: 'PyVISA API Reference', href: '/base-commands' },
   //     { title: 'Programming', href: '/programming-commands' },
   //     { title: 'Query', href: '/query-commands' },
   //     { title: 'Measurement', href: '/measurement-commands' },
