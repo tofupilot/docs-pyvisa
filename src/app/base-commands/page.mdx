@@ -1,182 +1,165 @@
-import { defaultMetadata } from '../metadata'
+import { defaultKeywords, defaultOpenGraph } from '../metadata'
 
 export const metadata = {
-  ...defaultMetadata,
   title: 'PyVISA API Reference',
   description:
-    'A guide to the PyVISA API, describing the Python module\'s structure, classes, methods, and usage examples for controlling measurement instruments using the VISA standard.',
+    'Explore the PyVISA API to manage and interact with instruments via VISA standards.',
   keywords: [
-    ...defaultMetadata.keywords,
-    'api reference',
-    'pyvisa module',
-    'ResourceManager',
+    ...defaultKeywords,
+    'PyVISA',
+    'Instrument Control',
+    'VISA API',
+    'Python VISA',
   ],
   openGraph: {
-    ...defaultMetadata.openGraph,
-    title: 'PyVISA API Reference',
+    ...defaultOpenGraph,
+    title: 'PyVISA API Reference - Instrument Communication in Python',
     description:
-      'PyVISA API practical documentation of classes, methods, with usage examples.',
+      'Detailed documentation on the PyVISA API, including how to manage instruments, send commands, and read responses.',
   },
 }
 
 # PyVISA API Reference
 
-## `pyvisa` Module
----
-
-Import the `pyvisa` module to start using its components:
+Control measurement instruments using the VISA standard with the PyVISA library. {{ className: 'lead' }}
 
 <Code language="python" code={`import pyvisa
-# List all VISA resources
-pyvisa.ResourceManager().list_resources()`} />
 
-## `ResourceManager`
----
-
-_Class within the pyvisa module_
-
-The `ResourceManager` manages VISA resources and sessions. These resources represent the instruments you want to control.
-
-### Methods
-
-- **`list_resources(query='?*::INSTR')`**
-  - Returns a list of available VISA resources matching the query.
-  - **Parameters:**
-    - `query` (str): A VISA resource query string. The default is `'?*::INSTR'`.
-  - **Returns:**
-    - A list of resource strings that match the query.
-
-- **`open_resource(resource_name)`**
-  - Opens a connection to a VISA instrument, returns an `Instrument` object.
-- **Parameters:**
-    - `resource_name` (str): The VISA instrument to open. Common formats:
-        - GPIB: `'GPIB0::20::INSTR'`
-        - USB: `'USB0::VID::PID::SerialNumber::INSTR'`
-        - Serial: `'ASRL1::INSTR'`
-        - TCP/IP: `'TCPIP0::192.168.1.42::INSTR'`
-        
-        See the [interfaces](/interfaces) page for setup instructions (Windows / Linux).
-- **Returns:**
-    - An `Instrument` object representing the opened resource.
-
-- **`close()`**
-  - Closes the Resource Manager and cleans up any allocated resources.
-
-### Attributes
-
-- **`session`**
-  - The VISA session handle.
-
-## `Instrument`
----
-
-_The `Instrument` class is returned by the `open_resource()` method of the `ResourceManager`._
-
-This is the class used to communicate with instruments.
-
-### Lifecycle
-
-- **Instantiation:**
-
-  <Code language="python" code={`instrument = resource_manager.open_resource('GPIB0::1::INSTR')`} />
-
-- **Closing/Cleanup:**
-
-  <Code language="python" code={`instrument.close()`} />
-
-  This properly releases the connection to the instrument.
-
-### Methods
-
-- **`write(message)`**
-  - Sends a command to the instrument.
-  - **Parameters:**
-    - `message` (str): The command string to send.
-
-- **`read()`**
-  - Reads data from the instrument.
-  - **Returns:**
-    - The data read from the instrument as a string.
-
-- **`query(message)`**
-  - Sends a command to the instrument and reads the response.
-  - **Parameters:**
-    - `message` (str): The command string to send.
-  - **Returns:**
-    - The response from the instrument as a string.
-
-- **`ask(message)`**
-  - An alias for `query`.
-
-- **`read_values(format=None)`**
-  - Reads a list of values from the instrument.
-  - **Parameters:**
-    - `format` (str, optional): The format of the values to read. Default is `None`.
-  - **Returns:**
-    - A list of values obtained from the instrument.
-
-- **`clear()`**
-  - Resets the device.
-
-- **`trigger()`**
-  - Sends a trigger signal to the instrument.
-
-### Attributes
-
-- **`timeout`**
-  - The timeout for read/write operations.
-
-- **`chunk_size`**
-    - The size of data chunks (in bytes) **for read operations**.
-    - Affects both ASCII and binary transfers.
-    - Default is 20 480 bytes (20KB).
-    - For optimizing performance when reading large amounts of data.
-
-- **`values_format`**
-  - The data format used for lists of read values.
-
-- **`term_chars`**
-  - The termination characters used in read and write operations.
-
-## Constants
----
-
-### Constants and Status Codes
-
-PyVISA provides several constants for checking operation status and configuring instruments:
-
-- **`constants.StatusCode`**
-    - `VI_SUCCESS`
-    - `VI_ERROR_TMO` / `VI_ERROR_TIMEOUT`
-    - `VI_ERROR_INV_OBJECT`: Invalid object/session reference
-    - `VI_ERROR_NSUP_OPER`: Operation not supported
-
-Example usage:
-<Code language="python" code={`import pyvisa
-
+pyvisa.log_to_screen()
 rm = pyvisa.ResourceManager()
-try:
-        instr = rm.open_resource('GPIB0::10::INSTR')
-        status = instr.write('*IDN?')
-        if status == pyvisa.constants.StatusCode.success:
-                print('Command sent successfully')
-except pyvisa.VisaIOError as e:
-        if e.error_code == pyvisa.constants.VI_ERROR_TMO:
-                print('Operation timed out')`} />
 
-- **`constants.InterfaceType`**
-    - `GPIB`, `ASRL`, `USB`, `TCPIP`: Constants for interface types
-    - Used for identifying resource types and filtering
+instruments = rm.list_resources()
 
-- **`constants.AccessModes`**
-    - `NO_LOCK`, `EXCLUSIVE_LOCK`, `SHARED_LOCK`
-    - Control access permissions when opening resources
+# Using "with" closes the instrument properly even if an exception occurs
+with rm.open_resource(instruments[-1]) as inst:
+    # Common for serial instruments
+    inst.write_termination, inst.read_termination = '\\n', '\\r\\n'
 
-## Exceptions
+    # Identify the instrument (manufacturer, model, serial number, firmware version)
+    idn_response = inst.query('*IDN?')
+    print(f"Instrument ID: {idn_response}")
+    
+    # Set voltage to 12V
+    inst.write("VOLT 12")
+    print(f"Voltage Set: {inst.query('VOLT?')}V")`}/>
+
 ---
 
-- **`VisaIOError`**
-  - Raised when a VISA I/O operation fails.
+## Resource Manager {{ tag: 'Class' }}
 
-- **`InvalidSession`**
-  - Raised when an operation is attempted on an invalid session, such as a closed or disconnected instrument.
+<Row>
+  <Col>
+    The `ResourceManager` handles VISA resources and manages sessions.
+    <Properties>
+      <Property name="list_resources" type="method">
+        Returns a list of available VISA resources.
+      </Property>
+      <Property name="open_resource" type="method">
+        Opens a connection to a VISA instrument.
+      </Property>
+      <Property name="close" type="method">
+        Closes the Resource Manager session.
+      </Property>
+    </Properties>
+  </Col>
+  
+  <Col sticky>
+    <Code language="python" code={`import pyvisa
+rm = pyvisa.ResourceManager()
+resources = rm.list_resources()
+instrument = rm.open_resource(resources[0])
+instrument.close()`} />
+  </Col>
+</Row>
+
+---
+
+## Instrument {{ tag: 'Class' }}
+
+<Row>
+  <Col>
+    The `Instrument` class sends and receives commands from measurement devices.
+
+    <Properties>
+      <Property name="query" type="method">
+        Sends a command and reads the response.
+      </Property>
+      <Property name="write" type="method">
+        Sends a command to the instrument.
+      </Property>
+      <Property name="read" type="method">
+        Reads data from the instrument.
+      </Property>
+      <Property name="clear" type="method">
+        Clears the instrument state.
+      </Property>
+      <Property name="timeout" type="attribute">
+        Timeout for read/write operations in milliseconds.
+      </Property>
+      <Property name="write_termination" type="attribute">
+        Character(s) appended to each write operation.
+      </Property>
+      <Property name="read_termination" type="attribute">
+        Character(s) expected at the end of a read operation.
+      </Property>
+      <Property name="baud_rate" type="attribute">
+        Baud rate for serial communication.
+      </Property>
+      <Property name="query_delay" type="attribute">
+        Delay between write and read in query operations (seconds).
+      </Property>
+      <Property name="parity" type="attribute">
+        Parity setting for serial communication.
+      </Property>
+      <Property name="stop_bits" type="attribute">
+        Stop bits for serial communication.
+      </Property>
+      <Property name="data_bits" type="attribute">
+        Data bits for serial communication.
+      </Property>
+      <Property name="chunk_size" type="attribute">
+        Buffer size for data transfers (bytes).
+      </Property>
+    </Properties>
+  </Col>
+  
+  <Col sticky>
+    <Code language="python" code={`inst.timeout = 2000  # Timeout in milliseconds
+inst.write_termination = '\\n'
+inst.read_termination = '\\r\\n'
+inst.chunk_size = 20480  # Default chunk size
+
+instrument.query('*IDN?')
+instrument.write('VOLT 12')
+response = instrument.read()
+print(response)`} />
+  </Col>
+</Row>
+
+---
+
+## Exception Handling {{ tag: 'Exceptions' }}
+
+<Row>
+  <Col>
+    PyVISA raises exceptions for error handling during instrument communication.
+    <Properties>
+      <Property name="VisaIOError" type="exception">
+        Raised for VISA I/O operation failures.
+      </Property>
+      <Property name="InvalidSession" type="exception">
+        Raised when accessing an invalid session.
+      </Property>
+    </Properties>
+  </Col>
+  
+  <Col sticky>
+    <Code language="python" code={`try:
+    instrument.write('*IDN?')
+    response = instrument.read()
+except pyvisa.VisaIOError as e:
+    print(f"Error: {e}")`} />
+  </Col>
+</Row>
+
+---
